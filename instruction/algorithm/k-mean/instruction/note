@@ -1,0 +1,10 @@
+How to run k-mean
+
+Prepare data, unlabled 
+#1 
+prepare centroids (number of clusters) using kmeanInit
+#2 
+plugs into kMeans 
+#3
+To predict use findclosestcentroid on unkonwn data X with centroids
+optimized. This will returns c which is the group unkwon data X belongs to.

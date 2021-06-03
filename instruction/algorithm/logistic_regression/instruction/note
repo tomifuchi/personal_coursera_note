@@ -1,0 +1,11 @@
+How to run:
+Prepare X, y, num_label=unique(y), lambda usually 0.01 0.1 1 10 100
+Theta's usually randomly initialized, or zero's. Running randomly initialized
+theta's often times do give lower cost function theta's.
+
+When inserting theta's into cost function it's mx1 not 1xm. If it's multiple variables
+that is for each row i is y = group i, and theta's for that group i. To insert it into
+a cost function, you must index it out. turn it from 1xm to mx1.
+
+* Run OneVsAll to get theta 
+* Put theta in predictOneVsAll desired X and num_label=unique(y)

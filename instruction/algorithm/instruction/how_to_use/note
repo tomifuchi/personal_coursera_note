@@ -1,0 +1,292 @@
+We were given the greatest power of the human learning patterns. That's coded to
+a computer, to effectively, and not waste any time from anybody. You need to know
+how to use it, and correctly use it. This file here concerns of how to use them
+correctly:
+
+First, If you don't know how linear regression, logistic regression, neural network
+works. Understand those first then come back here.
+
+In this folder is a bunch of octave/Matlab function that's design to diagnosed and 
+evaluates your hypothesis and learning algorithm.
+These are separates from the algorithm itself.
+
+Okay, assumed you know how those works. Now how to use them.
+
+Contents
+
+I)Examining data
+II) General cost
+III) Diagnosing your algorithm (Look into diagnose folder for octave implementation)
+IV) Neural network
+--------------------------------------------------
+
+I) Examining data
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Presumed that you have correct choose, and collect the right data for the job.
+
+* Check out frequency distribution: Look for skewed data, outliers, abnormalities.
+* Check out central tendencies (Or middle): Mean, median, mode
+* Check out variability (or spread).
+* Check out if it will fit certain known distribution: Normal distributions,...
+
+II) General cost 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+========Problem===========:
+To accurately define, and evaluate your prediction hypothesis, we have the cost function
+We then minimized that said cost function. The problem here is if we don't split our
+data up, we will have an overly optimistic hypothesis. Because we use those, said
+data to train our data, therefore it will fit exactly to that data set.
+
+When it has low cost maybe the hypothesis has high polynomial degrees, but useless to
+predicting unknown data. And alot more variable in play.
+
+IN SHORT YOU NEED TO SPLIT YOUR DATA UP, AND CALCULATES GENERAL ERROR 
+_________Solution_________
+Before anything is done, we have to do define some structure before
+running anything. To get the general error of our algorithm
+
+Data:
+-----
+Split the data into 60%/20%/20% (Train set/cross-validation set/test set).
+m_train, m_cv, m_test (Numbers of data in the set)
+
+Important, to separate them out.
+Train 60%, untrained 20% calculate cost 20% to select best model, 
+Final 20% will be calculated for general error after everything else is done.
+
+Training/Testing routine when running machine learning algorithm
+-----------------------------------------------------------------
+Linear regression
+- Learn parameter theta from training data (Minimizing J_theta).
+- Compute the test error for train, cross-validation, test set:
+For the train set
+J_theta_train(x) = (1/2m) * sum from i=1 to m (h_theta(x(i)) - y(i))^2
+
+For the cross-validation set
+J_theta_train(x) = (1/2m_cv) * sum from i=1 to m_cv (h_theta(x_cv(i)) - y_cv(i))^2
+
+For the test set
+J_theta_train(x) = (1/2m_test) * sum from i=1 to m_test (h_theta(x_test(i)) - y_test(i))^2
+
+Logistic regression
+- Learn parameter theta from training data (Minimizing J_theta).
+- Compute the test error instead of the cost function:
+ Misclassification error
+For the train set
+ J_theta_train(x) = -(1/m_train) * 
+sum from i=1 to m (y_train(i)log(h_theta(x_train(i) + (1 - y_train(i))log(x_train(i)))))
+
+For the cross-validation set
+ J_theta_cv(x) = -(1/m_cv) * 
+sum from i=1 to m (y_cv(i)log(h_theta(x_cv(i) + (1 - y_cv(i))log(x_cv(i)))))
+
+For the test set
+ J_theta_test(x) = -(1/m_test) * 
+sum from i=1 to m (y_test(i)log(h_theta(x_test(i) + (1 - y_test(i))log(x_test(i)))))
+
+err(h_theta(x),y) = 
+   + 1 if h_theta(x) >= 0.5 and y = 0 (Guessed wrong)
+          h_theta(x) < 0.5 and y = 1
+   + 0 if predict correct
+- Test set error = (1/m_test) sum from i=1 to m_test err(h_theta(x),y)
+
+III) Diagnosing your algorithm
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Most of your problems, assumed implemented the algorithm correctly. Is either
+Bias or variance problems. That is overfeeding or under-fitting.
+
+It's really important to find out if your algorithm suffers from either. If you know
+which is the problem, you so can take sensible action towards fixing those errors. Instead
+of randomly deciding what should you do. Effectively use your time and resources. And
+overall more accurate hypothesis leads to accurate predictions.
+
+Diagnosing your algorithm, to see if it's either having an over-fitting or
+under-fitting problem
+---------------------------------------------------------------------
+Imagine a graph
+y axis is error or cost 
+x axis is the degree of polynomial of our hypothesis function
+
+Left to right, a line hugging the error axis, then decreasing smoothly to zero
+when increasing polynomial orders.
+
+This Line is the J_theta_train
+
+Left to right, aline hugging the error axis, probably above he J_theta_train line a
+little bit, comes down smoothly then rise up like x^2 as degree of polynomial increases.
+
+This line is the J_theta_cv
+
+Explanation:
+- The J_theta_train line represent the error of train set when the polynomial increases.
+at 1 the error usually high, then as more and more polynomials term added, the line
+can fit better to the data => Lower the error, sometimes to zero.
+
+- The J_theta_cv line represent the error we use to select our hypothesis function's
+degree. Similar to J_theta_train, it usually will not fit the data as good with d =1,
+then slowly comes down when function's degree increases, but will go up when the
+degree is too high. Reason is J_theta_train is the hypothesis we fit the data to. 
+J_theta_cv we didn't, therefore, if the line fit too well to the train data, will not
+fit to something it doesn't seen before. (Usually the case)
+
+From this we can accurately tell what is our problem.
+
+If your algorithm is suffering from bias (under-fitting):
+J_theta_train and J_theta_cv is high, and both will relatively the same.
+
+If your algorithm is suffering from variance (over-fitting):
+J_theta_train is low, but the J_theta_cv is higher than J_theta_train.
+
+Suggest solutions/practice:
+These below are solutions to the problems above. It can be cumbersome to implement
+or understand but it's a must to take these solution as practice.
+
+1) Solution to choosing the right hypothesis(model selection) 
+(diagnose/find_poly.m)
+=============Problem===========:
+Not choosing your hypothesis degree appropriately will cause the following
+Over-fitting: Low cost, but practically useless when predicting unknown data
+Under-fitting: high cost, predict inaccurate data. 
+With or without regularization.
+
+________Solution_________:
+Strike the balance in the middle
+
+Now how do you choose the degree of polynomials for your hypothesis ? 
+(Assumed x_0 = 1)
+
+h_theta(x) = theta_0 + theta_1*x
+h_theta(x) = theta_0 + theta_1*x + theta_1*x^2
+h_theta(x) = theta_0 + theta_1*x + theta_2*x^2 + theta_3*x^3
+.
+.
+h_theta(x) = theta_0 + theta_1*x + ... + theta_10*x^10
+
+Or any degree you wanted to. Denote d = degree of polynomial you want
+
+Selects a bunch of different degree hypothesis.
+minimized J -> theta -> J_theta_cv(theta)
+Get the lowest J_theta_cv(theta) theta
+
+To find generalize test error, look at the best degree test set's cost J_theta_test.
+
+You can plot learning curve again to see if the high bias problem or high variance
+problem still exists
+
+2) Choosing the right regularization (To address over-fitting in a high term polynomial)
+(diagnose/find_lambda.m)
+=============Problem===========:
+Not choosing your regularization term appropriately will too cause the following
+Over-fitting: Low cost, but practically useless when predicting unknown data
+Under-fitting: high cost, predict inaccurate data. 
+With or without regularization.
+
+________Solution_________
+To reiterate what regularization is doing in the cost function is to prevent over-fitting
+. Lambda = 0, then it will not necessarily under fit when the degree of the polynomial
+is low, but when it's high, high probability it will over fit.
+
+(Comes to think of it, what the fuck is the point of regularization here ? 
+Oh yeah, they are there for when if you wanted to fit a high order(take into
+accounts a large number of features) into an algorithm without over-fitting 
+because it will, that's what high polynomial do, you has to have
+regularization)
+
+The cost function we will use exactly II) to measure our cost here. Ditch the lambda for
+now. But the cost function J_theta without anything still have the regularization part
+
+what we do is
+Selects a bunch of different lambda like lambda = 0, lambda = 0.01 0.02 0.04 0.08 to 10 
+minimized J -> theta -> J_theta_cv(theta)
+Find the lowest J_theta_cv(theta) theta's lambda, then that should be your lambda.
+
+Imagine a graph:
+x-axis is lambda
+y-axis cost 
+
+Left to right, a line hugging the lambda axis, then increasing up smoothly to infinity 
+on the cost axis when increasing lambda.
+
+This line is the J_theta_train
+
+Right to left, aline hugging the cost axis, probably above he J_theta_train line a
+little bit, comes down smoothly then rise up like x^2 as degree of polynomial increases.
+
+This line is the J_theta_cv
+
+Explanation:
+Right large lambda, J_theta_cv will be high.
+Left small lambda, J_theta_cv will be high.
+What you need is the middle strike should be the sweet spot.
+
+3) Examining learning curve
+(diagnose/learningCurve.m)
+---------------------------
+Use this to check: sanity of the learning curve, or the performance of the learning
+algorithm. 
+
+Plot J_train or J_cv to the size of data set. Artificially reduced the training
+sets
+
+What the plot looks like is
+
+Imagine a graph:
+x-axis is m
+y-axis cost
+
+Left to right the error lowest the line will rise like sqrt(x) as m increases. 
+
+This line is J_theta_train
+
+Left to right the error highest line will decrease like -sqrt(x) as m increases. 
+
+This line is J_theta_cv
+
+Both line is seeming like converging or parallel.(depending on the problem)
+
+Explanation:
+If we had a high bias hypothesis(under-fitting problem)
+
+the J_theta_train will increase, then leveled.
+the J_theta_cv will decrease, then leveled.
+Both line will be parallel.
+
++If a learning algorithm is suffering from under-fitting problem then, getting more
+data WILL NOT HELP.
+
++If we had a high variance hypothesis(over-fitting problem)
+Overall lower error, but both line is converging
+
+the J_theta_train will increase, they seemingly converging
+the J_theta_cv will decrease, they seemingly converging
+
+If a learning algorithm is suffering from under-fitting problem then, getting more
+data is LIKELY TO HELP.
+
+Now, what to do ? Here are some suggestions
+If you are having a high bias.
+- Try getting additional features.
+- Adding polynomials features.
+- Decreasing lambda.
+
+If you are having a high variance.
+- Get more training example.
+- Try smaller set of features.
+- Increasing lambda.
+
+IV) Neural network
+If you had a small neural network (fewer parameters), it's more likely to
+under-fit (Easily compute)
+
+This down here, you will run into more often than under-fitting.
+      v
+If you had a bigger neural network (more parameters) , it's more likely to
+over-fitting (Computationally expensive)
+Use lambda to address over-fitting.
+
+It's more preferable to have larger neuron network, it's more effective comes and only
+cost computational power.
+
+The number of hidden layer, usually: You can use a single hidden layer.
+Split data -> try training with 1 2 3 -> see which performs best on the
+cross-validation set.

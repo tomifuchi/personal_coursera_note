@@ -1,0 +1,45 @@
+Implementation of neuron network.
+
+The code in the validation is the cross checking accuracy of my algorithm,
+Everything is correct, crosschecked multiple times,
+even by hand calculations. Therefore, I have high hopes
+that the implementation works.
+
+Run ex4 in validation, read every code that's mention. The prinfts are from
+the professor himself. My version are outside of this instruction folder.
+Cross check them, if needed.
+
+Quick start
+* Check and run nn.m. If that file doesn't exsits come here
+* Prepare data for nnCostf
+* fminunc or fmincg, type
+
+%For fminunc
+options = optimset('GradObj', 'on', 'MaxIter', 100);
+[grad cost] = fminunc(@(p) nnCostf(p, params_dim, X, y, lambda), initial_theta, options);
+
+%For fmincg
+options = optimset('GradObj', 'on', 'MaxIter', 100);
+[grad cost] = fmincg(@(p) nnCostf(p, params_dim, X, y, lambda), initial_theta, options);
+
+* reshape optimized grad
+grad = params2mat(grad,params_dim);
+* predict X using optimized grad, X either made up of observed
+* Last activation layer is the result.
+forward_propagation(X,grad);
+
+%Example of running calculating nn on example paper
+X = [0 0;0 1;1 0;1 1];
+y = [1;0;0;1];
+theta1= randInitializeWeights(2,2);
+theta2= randInitializeWeights(2,1);
+theta = [theta1(:);theta2(:)];
+params_dim = [size(theta1);size(theta2)];
+lambda = 0; %Logical doesn't overfit
+
+%70's ish is the sweet spot for this
+options = optimset('GradObj', 'on', 'MaxIter', 70);
+[grad cost] = fmincg(@(p) nnCostf(p, params_dim, X, y, lambda), theta, options);
+
+r = params2mat(grad,params_dim);
+forward_propagation(X,r)

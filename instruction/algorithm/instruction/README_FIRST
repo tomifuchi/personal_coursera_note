@@ -1,0 +1,364 @@
+Machine learning
+
+-------Reading note-----------
+Note: To begin solving a machine learning problem you need to understand everything here
+to design, create, use the machine learning properly and effectively.
+
+                   You are here
+                    v 
+Design -> create & use
+Tips
+
+First immerse yourself here then move on to how to create, and then design.
+Play with it, get the feel for it then designing it will be easier. Rather than
+alot of chit chat, mumbo jumbo without hands on experience.
+
+------------------------------
+
+You run mathematical equation and a computer to either, extrapolates data (Regression)
+Or group, segregates (Classification)
+data into groups.
+
+Contents
+
+A) Supervised learning
+I) Linear regression (Fit a line straight through data, returns a real number)
+II) Logistic Regression (Classification, yes/no, group1/group2/group3, problem):
+III) Neural network (Read the physical paper for more info)
+IV) SVM (Check the SVM folder/instruction)
+
+B) Unsupervised learning
+I) K-mean algorithm (Return data and the closest centroids it belongs to, or simply
+said group data into k clusters)
+
+A)***Supervised learning******:
+Data on hand, use various technique to gain insights and extrapolates facts.
+
+Assuming x_0 = 1
+
+I) Regression problem (Predicting a real value):
+input X -> Algorithm -> output Theta use to draw a hypothesis line fittest to data 
+To predict input X you wanted to predict 
+
+n : number of feature
+
+Hypothesis function representation:
+h_theta(x) = theta_0 * x_0 + theta_1 * x_1 ... + theta_n * x_n 
+
+You have two ways to calculate theta of
+the fittest hypothesis function to data, either you calculate it directly called Normal
+Equation, or by algorithm.
+
+=================
+Normal equation:
+=================
+You can calculate theta directly with this equation
+theta = inverse(transpose(X)*X)*transpose(X)*y
+
+=============
+Algorithm:
+=============
+Cost function:
+This function is used to measure the accuracy of our hypothesis function. Closer to
+zero is more accurate.
+
+n : number of features
+m : number of observations
+
+J = (1/(2*m)) *
+sum i=1 to m {
+  (h_theta(i) - y(i))^2
+}
+
+Gradient descent
+This algorithm is used to minimized the cost function as close as possible to zero.
+By subtracting theta to it's gradient(Which is a partial derivative of theta). End
+result will be a theta that will have the lowest cost function. 
+
+Note: 
+* Choosing initial theta is generally at 0 to all theta, but sometimes, choosing
+different thetas will give a lower cost function.
+* By plotting the cost function, you would see if this algorithm is working or not.
+It should be descending to a point a smooth decreasing (any
+increasing then implementation is wrong), then flattens out.
+
+**General formula**
+
+Repeat until cost function has converged:
+with j is an index number for vector of theta's
+
+theta(j) = theta(j) = alpha * 
+partial derivative of theta_j of cost function J
+
+**Linear regression gradient descend**
+Repeat until cost function has converged:
+with j is an index number for vector of theta's
+
+x(i)(j): row i at column j, observation i at feature j
+
+For every j=0 to the size of the theta vector
+theta(j) = theta(j) - (alpha/m) *
+sum i = 1 to m {
+  (h_theta(x(i)) - y(i)) * x(i)(j)
+}
+Note: This is similar to Logistic regression gradient descend
+
+Output:
+After you get your theta, just get an observation or made one up, with n features.
+Plug it in the hypothesis function, sum it up then you will get the prediction
+for that observation. (remember to add column of 1's to X before calculating)
+
+
+II) Logistic Regression (Classification, yes/no, group1/group2/group3, problem):
+input X -> Algorithm -> Theta used to draw a hypothesis line separate 2 or more
+type of classes -> To predict input X you wanted to predict -> Output to either x
+has the highest chance belong to one in the class group.
+
+Hypothesis representation:
+z = theta_0*x_0 + theta_1*x_1 + ... + theta_n*x_n
+g = 1/(1 + e^(-z)) <- this is called a sigmoid function
+h_theta(x) = g(z)
+
+h_theta(x) number represent the chance of y = 1
+
+Some properties of hypothesis function:
+With z as the horizontal axis, g(z) is the vertical axis. A smooth curve will go
+from 0 to 1, from left to right.
+0 <= h_theta(x) <= 1
+
+At the point z = 0 g(z) = 0.5
+z < 0 g(z) will go down to zero, threshold around -8 or -9
+z >= 0 g(z) will go up to 1, threshold around 8 or 9
+
+Labeling hypothesis function output
+h_theta(x) >= 0.5 then y = 1
+h_theta(x) < 0.5 then y = 0
+
+Similar to linear regression, you can either calculate theta directly called
+normal equation(I don't know if this is possible), or calculate using an algorithm.
+
+================
+Normal equation:
+================
+*I don't know if this is possible or not, need some further investigation into this.
+
+==========
+Algorithm:
+==========
+Cost function:
+This function is used to measure the accuracy of our hypothesis function. Closer to
+zero is more accurate.
+
+n : number of features
+m : number of observations
+
+J = (1/m) *
+sum i=1 to m {
+  Cost(h_theta(i),y(i))
+}
+
+If y = 1
+Cost(h_theta(i),y(i)) = -log(h_theta(i)) 
+Graph description: a curve going from log axis, h_theta(x)=0 log axis is infinite
+then decreasing down to 0 as h_theta(i) approaches 1
+
+If y = 0
+Cost(h_theta(i),y(i)) = -log(1 - h_theta(i))
+Graph description: a curve going up from h_theta(x) axis, h_theta(x)=0 y axis is 0
+then increasing up to infinite as h_theta(i) approaches 1
+
+Then for convenience of application it can be written together like this
+Cost(h_theta(x),y) = -y*log(h_theta(x)) - (1 - y)*log(1 - h_theta(x))
+
+Then this became
+J = (1/m) *
+sum i=1 to m {
+  -y(i)*log(h_theta(x(i))) - (1 - y(i))*log(1 - h_theta(x(i)))
+}
+
+**Gradient descend**
+This algorithm is used to minimized the cost function as close as possible to zero.
+By subtracting theta to it's gradient(Which is a partial derivative of theta). End
+result will be a theta that will have the lowest cost function. 
+
+Note: 
+* Choosing initial theta is generally at 0 to all theta, but sometimes, choosing
+different thetas will give a lower cost function.
+* By plotting the cost function, you would see if this algorithm is working or not.
+It should be descending to a point, then flattens out.
+
+**General formula**
+
+Repeat until cost function has converged:
+with j is an index number for vector of theta's
+
+theta(j) = theta(j) = alpha * 
+partial derivative of theta_j of cost function J
+
+**Logistic regression gradient descend**
+Repeat until cost function has converged:
+with j is an index number for vector of theta's
+
+x(i)(j): row i at column j, observation i at feature j
+
+theta(j) = theta(j) - (alpha/m) *
+sum i = 1 to m {
+  (h_theta(x(i)) - y(i)) * x(i)(j)
+}
+This is similar to Linear regression gradient descend
+
+Output:
+Now you have your theta, find X or made one up, plug it in the hypothesis
+function, sum it up, sigmoid that shit, you will get a number equal or in between 0
+and 1. And if that number is larger than or equal to 0.5 then y = 1, or if less than
+0.5 then y = 0.
+
+Multi-class classification problem:
+Let's say you have not only yes/no or group1/group2 
+, but groups you need to classify. We use one vs all
+to classify them. 
+
+Let's say X has 3 features and some observations
+And  y has 3 class 1, 2, 3.
+
+To classify class 1 you set all y's to 1 if it's equal to class 1 and 0 if it's not class 1.
+Then do the logistic regression on this, get the vector of theta's
+
+To classify class 2 you set all y's to 1 if it's equal to class 2 and 0 if it's not class 2.
+Then do the logistic regression on this, get the vector theta's
+
+To classify class 3 you set all y's to 1 if it's equal to class 3 and 0 if it's not class 3.
+Then do the logistic regression on this, get the vector theta's
+
+with y has 3 class, 
+you will get 3 vectors of theta's with 4 items in each vector(including theta0,
+different vector have different values)
+
+Then you get an observation x either made up, or from somewhere.
+Plug each theta into a separate hypothesis function, plugin the x.
+Then plug in each one of those separate hypothesis function into sigmoid.
+
+In the end you will get a vector of 3 numbers range equal or in between 0 and 1. Selects
+the highest number that's closest to 1 then assign y to the group that sigmoid number 
+represent.
+
+Note: Sum of 3 of these must be equal to 1. Aka chances of this falling into group 1
+AND group 2 AND group 3 must equal to 1(statistic 101).
+
+------------------------------
+
+Others supervised algorithm, read the instruction folder inside each algorithm. Because
+it's longer, more involve than just this one file.
+
+B)***Unsupervised learning******:
+
+Unlabeled data is presented, you will then group them into groups or classify them
+into groups. So it's just X, and nothing else.
+Find structure in the data. 
+
+Algorithm that groups data into clusters called clustering algorithm. What are these
+good for ? 
+
+Market segmentation.
+Social network analysis.
+Organizing computer clusters.
+Astronomical data analysis ( What ?)
+
+I) K-mean algorithm:
+This algorithm is pretty easy. It consists of 2 step.
+
+INPUT: 
+- K cluster (How many groups do you want to group your data into?)
+- X (data)
+OUTPUT:
+- K centroids position, that can be use to predict new data that if that data
+is going to be in what group. 
+
+Centroids:
+A point to calculates the distance from an observation to. K clusters mean K centroids.
+Essentially a centroid is a data point, that means it has every features numbers.
+Similar to an observation.
+
+1) Preparation step 
+==Randomly initialize centroids: This step is really important, if not randomly
+initialized, it may be stuck in a local optima. Then it will not segregates k clusters
+well.
+We call them centroids:
+muy_1,muy_2,...muy_k
+
+Initialize it better if you can plot the damn thing, or if you can't and manually
+set the centroid. you can set the centroid to be equal to an example of X. Randomly
+or not based on common sense.
+
+==Choosing the number of clusters k
+How do you choose the number of clusters ? Mr Andrew suggests we choose them by hand.
+Or what you can do is run k = 1 or more - some number that's lower than m. pick
+the k that's has the lowest cost function. You can plot out k and cost function if
+you wanted to see which one to pick.
+
+Take an example of height and weight, height and weight are positively correlates.
+Therefore, what you can do is if you want to lower cost, you can just split it 
+to 3 clusters. S M L and cost less sells good
+. Or if you wanted to fit more customers  with S M XL XXL XXXL and cost more
+but sells better.
+
+2) The algorithm
+%Calculating distance
+For each example in X
+  For every centroid k
+        %This is J
+  	distance example to centroid k = norm(example - centroid k)^2
+  %This example's group that's the closest to it.
+  %(This is also optimizing of J)
+  group that's closest to example i = the group that has the smallest distance from example to k 
+
+%Moving the centroid by k mean
+%Minimize J with respect to muy
+for each centroid k
+  centroid k new position is = mean(x's that belongs that's closest to centroid k)
+
+Doing this enough then at some point the algorithm will converge, and the distance
+will just stabilize.
+
+3) The cost function (distortion function)
+This algorithm cost function should be with J is a cost function of x and c (the closest
+centroid x has been assigned to)
+
+J =  (1/m) *
+sum for every example of X 
+(||an example of X - centroid of the example closest to||^2)
+
+This should converge. Then will decrease no more, then this should the the optimized
+centroids that we are looking for.
+
+4) To predict which group does your data belongs to. calculates the distance step
+in the algorithm and selects the smallest, then it's that group.
+
+We are trying to minimize this cost function
+
+*What to keep in mind when using this algorithm:
+- k < m (cluster should be lesser to the number of examples)
+But with high number of centroids, random initialization might not make a huge difference.
+- To pick out the best run of k-mean, sometimes we have to run k-means around
+50 - 1000 times. To get the best clusters. Run then pick out the lowest cost function.
+
+*Trouble shooting:
+#Problem:
+Initialized centroid step can sometimes had a bad run with an unlucky initialization
+of centroid. 
+#Solution:
+Initialize centroids randomly again, then run. If possible, assists the initialization
+step if possible(Manually set the centroid).
+
+#Problem: 
+What happens if a centroid is not selected in the calculating the closest step ? 
+#Solution:
+Usually we remove them. But if have to be, you can reinitialize and run it. If
+still can't, remove them.
+
+Sample application: 
+This k mean can be use for image segmentation. That's, grouping each pixel into 
+a specific group. it can be 8 bits, 16 bits, or 64 bits of color, 256 is the max.
+Check out the validation folder for more info, it has pictures of a bird and a
+mustang. Try changing k and number of iterations (If the cost is low enough, you
+don't need to run until converge, or try something to fast face the algorithm)

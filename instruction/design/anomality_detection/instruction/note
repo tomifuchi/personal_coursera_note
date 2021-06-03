@@ -1,0 +1,24 @@
+HOW TO RUN, Read the note in the design folder section V
+
+#1 Assuming that you have already processed data into X, you now
+have to choose to use multivariate or product of normal distribution.
+
+#2 Find your parameters mu and sigma2 with params_gauss. sigma2
+should be a vector. that is diagonal matrix. To get a matrix SIGMA
+read the note.
+
+#3 If you choose product then just run product gaussian then with
+X sigma and mu. Get p_x.
+
+#3 IF you choose multivariate then just run multivariate then
+with X sigma and mu. Get p_x.
+
+#4 Predict your prediction with p_x suing
+y_pred = p_x < epsilon
+
+#4.5 To get the best epsilon use, then go back to #4
+[bestEpsilon bestF1] = selectThreshold(yval, y_prediction_validation_set);
+
+#5 To see if your calculation is correct, true inthe end to print
+#out the results
+calF1(y_pred, y, true);

@@ -1,0 +1,434 @@
+Some tips on how to increase perform algorithm quality and speed
+
+Ground rules on how to store data, Try do this for every data
+n : number of features
+m : number of observations
+
+For X input
+- x_0 is default 1, add a column of 1's to X (Some algorithm)
+- Columns are for features.
+- Rows are for observations.
+- The standard matrix for input is m x (n+1) (+1 is the column of 1's)
+
+For y input
+- Vector of outcome. Must be a column that is m x 1
+- Even if matrix, this should be a matrix of columns y that is
+with i number of y. The matrix of out come should be m x i
+
+For theta parameters
+- Similar to X's .
+- Columns are for theta0...thetan.
+- Rows are for whole each hypothesis. (Eg. row 1 for fitting habits of user 1,...)
+
+Contents
+
+I) Helping gradient descend (Mean normalization, feature scaling) (Speed)
+II) Regularization (Preventing over fitting) (Accuracy)
+III) Using optimized function for minimizing the cost function (Speed, Accuracy)
+IV) P.riciple C.omponent A.nalysis (PCA) (Speed)
+V) Various way of dealing with big data and performance of gradient descend 
+Stochastic, batch, mini-batch, Data parallelism (Speed)
+--------------------------------------------------
+
+I)*Helping gradient descend algorithm* (Speed)
+We can speed up gradient descent by having each of our input values in roughly
+the same range. This is because θ will descend quickly on small ranges and
+slowly on large ranges, and so will oscillate inefficiently down to the optimum
+when the variables are very uneven.
+
+The way to prevent this is to modify the ranges of our input variables so that they are all roughly the same. Ideally:
+
+−1 ≤ h_theta(x) ≤ 1
+
+or
+
+−0.5 ≤ h_theta(x) ≤ 0.5
+
+These aren't exact requirements; we are only trying to speed things up. The
+goal is to get all input variables into roughly one of these ranges, give or
+take a few.
+
+Two techniques to help with this are feature scaling and mean normalization.
+
+=Feature scaling and mean normalization=
+Feature scaling involves dividing the input values by the range (i.e. the
+maximum value minus the minimum value) of the input variable, resulting in a
+new range of just 1. Mean normalization involves subtracting the average value
+for an input variable from the values for that input variable resulting in a
+new average value for the input variable of just zero. To implement both of
+these techniques, adjust your input values as shown in this formula:
+
+x(i) = (x(i) - mean(x))/(max(x) - min(x))
+
+Feature scaling can be range or the data's standard deviation. 
+
+Mon Apr 26 12:27:06 +07 2021
+#Comment
+I'ved studied statistics, this is calculating Z scores, this scores represents how
+far does the data in question to the mean in standard deviation measurement
+
+Z = (X - mu)/(sigma)
+
+Say for an IQ test of 1000 people with mean 100 and standard deviation of 15
+Then for an IQ fo say 125 then the Z score is:
+
+Z = (125 - 100)/15 = 1.67
+
+This means that your data is 1.67 standard deviation above the mean. With this score
+you can represents in any distribution but with just differenet mean and std's. But
+the relative position of that data will stayed.
+
+So by normalizing this means that, this data changed into Z scores. So we can just,
+use Z's as data ? Well...If I think about it, if Z can be calculated and represented
+on any ditribution with any mean and standard deviation. Then....Yes it may. Although
+pretty less obvious is the main problem here. Not immediate intuitive.
+---------------------------
+
+
+
+*Vectorization* (Readability, speed)
+Instead of writing loops, try to vectorized your calculations(Matrix multiplication,
+and not just indexing each row or column when it's possible), Algorithm will run 
+faster.
+
+=Vectorization for use in octave use the above rules to store data=
+++Linear regression++
+h_theta = X * theta %Hypothesis function or known as prediction
+%Cost function
+J = (1/(2*m))*sum((h_theta- y).^2);
+%Gradient descend
+for iter = 1:num_iters
+    h_theta = X*theta; %Getting the hypothesis y's
+     theta = theta - alpha*(1/m)*((h_theta- y)'*X)';
+endfor
+^ With this code, you can just get the gradients, which is 
+((h_theta- y)'*X)'. Read the fminunc down below, use the cost function with this to
+yield better result.
+
+++Logistic regression++
+function ans = sigmoid(z){ans = 1 ./(1 + e.^(-z);} %Sigmoid function
+h_theta = sigmoid(X * theta) %Hypothesis function
+%Cost function and grad to be put in fminunc
+cost = -y'*log(h_theta) - (1-y)'*log(1 - h_theta);
+J = ((1/m) * cost) + (lambda/(2*m))*sum(theta(2:end).^2);
+grad = (1/m)*((h_theta - y)'*X)';
+grad = grad(:); %Turns into a column
+
+II)*Regularization* (Accuracy)
+Sometimes over-fitting when having alot of feature in the data sets, can have an over
+fitting to data. Why over-fitting is bad ? If you try to squeeze the function into 
+to be exact to the dataset it will cause the function to ripple, or obtain a shape
+that's not going to be realistically predict the unknown data. 
+
+So what you do is adding a sum term of theta to the cost function, cause
+the algorithm to slightly diverge the graph from the data. Ideally, if possible, look
+for the specific term that's causing the function to ripple or over-fitting. Then add
+a large number times to that theta to deripple that part of the function. But...this
+is often not possible due to the very very VERY large size of feature and data.
+
+=Regularization for Linear regression=
+*Implement this*
+
+=Regularization for Logistic regression=
+h_theta = sigmoid(X*theta)%Hypothesis to a vector
+cost = -y'*log(h_theta) - (1-y)'*log(1 - h_theta);
+J = ((1/m) * cost) + (lambda/(2*m))*sum(theta(2:end).^2);                               
+grad = ( (1/m) *  ((h_theta - y)'*X)')  + (lambda/m)*[0;theta(2:end)];
+%Note the lambda thingy to the end is the regularization
+
+III)*Using optimized function for minimizing the cost function* 
+(Readability, Speed, Accuracy)
+
+fminunc is your friend. With any cost function, to apply gradient descend on it, with
+a highly optimized function (written and tested by professionals or so I thought) Just
+write how to calculate the cost function, and the gradient for every theta.
+input the initial theta's, X, y's, Bam. 
+
+IV)*PCA* (Speed)
+Principle component analysis (PCA)
+Reducing dimension is it main goal. Reducing from R^n to some R^k with 
+k < n (significantly smaller if possible)
+
+If you have a powerful computer, then you may consider not implement this into
+the process.
+
+What is this for ? 
+- Saving memory on computer, and speed up algorithm.
+- Data visualization. (k = 1,k = 2, k = 3) Anything above this, you can't see shit.
+
+If you had alot of features but would like to approximates R^n to R^k, for performance
+and visualization purposes. You need to consider the variance error, sometimes, data
+with a very high dimension can be reduced down, but doesn't lose too much information.
+
+What this algorithm does is find and project X R^n into X_reduced R^k.
+
+Specifically, this shit involves linear algebra, but Mr Andrew said not to worry 
+too much about them. But I think I should know more about this. But in short.
+He gave the steps to reduced X down to k dimension. Specifically to octave.
+
+0) Preprocessing data
+Mean normalization.
+Feature scaling (if needed) if the ranges of each features is too incomparable to each
+other, like size of house then number of bedrooms. 1000 then 5. Then this need
+feature scaling.
+
+1) Reducing X down to R^k
+*Calculating covariance matrix denote Sigma
+Sigma = (1/m) * sum from 1 to n (x(i))(x(i))^T  
+Sigma = (1/m) * X' * X; %nxn matrix
+*Eigen vector of matrix Sigma svd(singular value decomposition) Or eig, svd is the same.
+[U,S,V] = svd(Sigma) 
+%We take the U which is nxn, to reduce to k, take first k column of U
+U_reduced = U(:,1:k); %nxk
+%To calculate X reduced down
+X_reduced = X * U_reduced;
+
+2) Reconstructing data from R^k back to R^n
+%U reduced 
+U_reduced = U(:,1:K);
+
+%Reconstructing X 
+X_rec = X_reduced * U_reduced'; %X_rec will be close to the original X
+
+2) Measuring which k will give the least error. Or retained the most data when
+reducing dimension.
+
+You can try each k from k = 1 and up.
+#1
+This algorithm is trying to minimize this 
+Average square (1/m)*sum from i to m (norm(X(i) - X_rec(i))^2)
+Total variance in data  1/m*sum from i to m (norm(X(i))^2)
+
+you can calculates if this ratio is less than 0.01
+
+(Average square)/(total variance in data) <= 0.01
+
+#2
+And when you have calculates svd then you have S matrix in [U,S,V]=svd(Sigma). 
+S is a square nxn diagonal matrix. 
+The same ratio above is calculates with 
+
+1 - (sum i to k S_ii )/(sum i to n S_ii) <= 0.01
+
+Or you can remove 1 for 0.99 saying.
+
+99%,95%,90%, and lowest 85% of variance is retained. Choose the highest if possible.
+
+You want a k that has this ratio less than 0.01.
+
+Side note: 
+#1
+You can sometimes compare linear regression to this, these two are not
+the same. 
+Linear regression is minimizing the point and the straight line with square
+error function. This is minimizing the projection, the line orthogonal to the
+line trying to have the projection smallest.
+#2
+In image processing, or any features that's a fucking lot, then this is needed. Or 
+else this shit will run really slow.
+
+For supervised learning:
+(x(1),y(1)) (x(2),y(2)) ... (x(m) y(m)) TRAINING SET, REPEAT ONLY ON TRAINING SET
+step 1: Extract input in X x(1)...x(m) in R^n
+step 2: Apply PCA into z(1)...z(m) in R^k (reduced)
+
+Then for the cross validation set and test set. We use the mapping,
+mean normalization, features scaling data, U_reduced from
+the training set to reduce the cross validation set, and test set down to R^k.
+Don't use any of the cv or test for finding these parameters.
+
+#3 Avoid misuse of PCA
+Don't use this to prevent over-fitting, this is dumb. It does reduce features, then
+ofcourse it's less likely to over-fit but you have regularization use them. Don't be dumb.
+PCA doesn't use y, it throws away information.
+
+#4 Design PCA sometimes use where it shouldn't be
+Instead of running any project, with PCA. Ask what if we run everything but don't
+include PCA. Before running PCA, do whatever you want to do, then only if that doesn't
+work. Then try PCA. Only if you have a really good reason.
+
+V)*Various way of dealing with big data and performance of gradient
+descend* (Speed)
+Large scale with data or n at a very large number AKA in hundreds
+of millions or billions of data, that's what we are dealing with
+here.
+
+"It's not who has the best algorithm, but who has the most data."
+
+Before applying this technique, why don't we ask ourselves. WHY
+do we have to do this instead of just run this algorithm on a 
+sample say 500,000 or something. And why ALL ?
+
+Here's my thought on sampling. Let's just say I cooked a pot of soup.
+To know the taste after I seasoned, I don't eat the whole pot
+to know the flavor. I ONLY SAMPLE the POI, that's take a spoon, have
+a sip. That's it. So in someway I theorize that our problem is
+similar aswel even with many factor. MAJORICALLY IT WILL BE
+THE SAME ALL AROUND.
+
+So to check if you want to know more data is good ? Plot the learning
+curve, if it's high variance then it'll make sense to get more data.
+Then improve the performance of our algorithm. High bias, don't
+get more features, in short, get complication into your model.
+
+These are not an algorithm, this is a way of running our gradient
+descend. These have the same principle on other algorithm aswel. But
+here we explicitly focus on linear regression gradient descend.
+
+NOTE: BE SURE TO SHUFFLE OUR DATA BEFORE DOING THIS.
+
+==Batch Gradient==
+Here is our gradient descend algorithm of linear regression. 
+
+Hypothesis and cost
+h_theta(x) = sum j=1:n theta(j)^t*x(j)
+J(theta) = (1/2m) * sum i=1 to m (h_theta(x(i)) - y(i))^2
+
+This here is our gradient descend
+Repeat {
+	theta(j) = theta(j) - alpha * (1/m) ...
+		* sum i=1 to m (h_theta(x(i)) - y(i))*x_j(i)
+	j = 0..n
+}
+
+With batch gradient descend, it's the way that we were doing the
+whole time. With our sum of the differences from 1 to m. If
+we left it like this it's okay for less than 500,000. Anything more
+than that, read below for ways to deal with this.
+
+==Stochastic Gradient Descent==
+
+This will allow us the ability to run ALL of our data. Or at least
+majorically of our data. In short, this method running each
+gradient descend step on 1 data of X and then change theta accordingly.
+That's it. But here's how it works
+
+We split the sum as one giant sum 
+ into individual cost then sum it back together.
+
+%Cost for 1 data
+cost(theta, (x(i),y(i))) = 
+(1/2) * (h_theta(x(i)) - y(i))^2
+
+%Sum for each data is our cost
+J(theta) = (1/m) * sum i=1 to m of cost(theta, (x(i),y(i)))
+
+%Gradient descend
+Repeat {
+	for i = 1 to m{
+	 for j = 1 to n
+	  theta(j) = theta(j) - alpha * (h_theta(x(i)) - y(i))*x_j(i)
+	}
+}
+
+In short it's like this, read 1 data, update all theta on that 1 data
+then read another data then update all theta on that 1 data. And
+so on. Until we have gone through all m data.
+
+Batch vs stochastic:
+This can be advantageous to batch if we have data like 100,000,000 or
+some shits like that. Instead of waiting around for sum of 100,000,000
+of like 10+1 features that's summing 100,000,000 11 times AND
+ALL OF that for just 1 step. 
+
+
+Ensuring the damn thing is converging:
+But if you use stochastic, things will change of course. The cost
+may goes up or down, up generally decreasing, You can't see it's 
+decreasing if you just plot after 1 example. But you can see it's
+decreasing if you plot over a large step like every 1000 or 5000
+examples. If after 1000,5000 examples and shit doesn't change
+or increase, you must tweak your alpha or learning rate.
+
+If increasing: learning rate too big, cost's diverging. decrease that
+shit.
+If it's taking TOOO FUCKING LONG to converging: Well, for batch
+gradient descend we can tell immediately that's because alpha is
+too small so it's converging slowly, but with stochastic it's hard
+to tell. But After like a big step like 5-10,000 iterations AND
+IT's not decreasing, it maybe time to increase alpha a little bit.
+
+SOMETIMES note by SOMETIMES by using a smaller learning rate it can get
+converging better than large alpha
+
+About the plot: it's not as smooth as running batch gradient descend.
+Jagged, but in general IT SHOULD BE DECREASING, if you can't see
+it plot it in larger step. BUT, even if in large step and it's not
+decreasing then read above for guidance. But larger step size meaning
+waiting longer, so give and take.
+
+This will wandering around to the global minimum, even if it's not
+at the global minimum but it's near the global minimum. And that's
+okay for calculating 100,000,000 data.  Sometimes even running
+stochastic gradient descend for 1 time it might just have converged
+for such large m.
+
+Getting to global minimum:
+Here's how you get stochastic style to go to global minimum:
+alpha learning rate throughout our data is usually constant. But we
+can slowly decrease alpha overtime. (example alpha = constant1 /
+(iteration number) + constant2) 
+
+But note that some people just accept cost that's not global minimum.
+And not using this because it might be finicky and one more thing
+to worry about. When good enough is actually enough.
+
+But if you are willing to then you can get to global minimum if you
+apply this learning rate right.
+
+==Mini batch gradient descent==
+In short, instead of running Let m be R. Then what we do is split
+m into combination then run that. If say 
+a + b + c = m.
+
+Then we run batch gradient a elements
+Then we run batch gradient b elements
+Then we run batch gradient c elements
+
+After that we sum them up together to get Batch gradient descend
+
+Range of split is between 10, 100. here is the algorithm
+
+If our split is 10
+Repeat {
+	for i = 1..10;11..20,...{
+	
+	for j = 0..n
+	theta(j) = theta(j) - alpha * (1/m) ...
+		* sum i=1 to m (h_theta(x(i)) - y(i))*x_j(i)
+	}
+}
+
+This with good step size, vectorization of the sum. Will sometimes
+outperform the stochastic style.
+
+*Map Reduce and Data Parallelism*
+You have billions of data ? Here's your solution. Multiple computers.
+Or a really strong one.
+
+Similar to mini batch but not so.
+
+Say for a summing algorithm like gradient descend then we split
+the sum out. m = 400,000,000/ 400 for short:
+
+				 We split up this step here into 
+				multiple computers
+				  v
+let theta(j) = theta(j) - alpha * sum from i = 1 to m (h_theta(j) - y(j))*x(i)_j
+
+If you have 4 machines, or computer core ? (I don't know, I don't think
+that this will work)
+Machine 1: sum 100 data
+Machine 2: sum of next 100 data
+Machine 3: sum of next 100 data
+Machine 4: sum of last 100 data
+-------------------
+Then we can sum for each 100 * 4 = 400 (millions)
+
+Then transfer to a computer sum them up then take a gradient step.
+
+This will only work on summation expression. That's if you can
+express that algorithm as a sum or
+bulk of the work as a sum. then you can do this map reduce 
+and data parallelism  on multiple machine. Potentially N*times fold
+each machine faster time. Say that no lagging is presents.

@@ -1,0 +1,80 @@
+Collecting data is an important process if you wanted to get anywhere with 
+machine learning.
+
+Most important factor is, what do you collect ? and how much ? where ? and of course
+why ?. Every question here must be answer correctly.
+
+
+Contents 
+
+I) How much is enough data ?
+II) Creating artificial data, data synthesis.
+
+I) How much data is enough ?
+=========================
+UNDER CERTAIN CONDITIONS, a VERY LARGE DATASET is helpful.
+
+Assumed size(X) = n+1 has sufficient information to predict y accurately.
+
+In which condition this is true ?
+----------------------------------
+Using low bias algorithm will be true. learning algorithm with many parameters 
+(e.g Logistic regression, linear regression, neural network with many hidden units)
+
+If you use a VERY LARGE, more than number of features(Unlikely to over-fit)
+
+An algorithm is prone to have 2 problems over-fitting and under-fitting.(High bias and
+high variance)
+
+Under-fitting is when you don't have a functions that's not complex enough, therefore
+needs more features.
+
+Over-fitting is when you have more features, and due to over-fitting can't predict 
+unknown data. 
+
+But as we can see, with a very large data set. Cost in cross-validation and cost
+in training will be converging as the data set increases in size. (Read how_to_use)
+
+Therefore, with a very large data set. You can pretty much guess
+anything correctly because data's massive. If you have fitted to it.
+Then in theory you have fitted over alot of data.
+
+II) Creating artificial data, data synthesis.
+===============================================
+Read II before read this. Have a low bias or high variance
+model before doing this. Plot the learning curve.
+
+You can create data from scratch or from a set of small data. You
+can make your own data using various method. Heres one way
+
+Let's say you are creating an algorithm to guess a letter from an
+image pixelxpixel with label y. You can have more data if you are
+creative. On your computer already have alot of fonts. Take them
+posted them on the background. Bend them, recolor them... But
+keep this in mind. REASONABLE distortions, warping to characters.
+
+If you make artificial data, ask your self, will these data exist
+in the data set.
+
+If recognizing sound clip. You can use a sound clip, then add 
+background noise. Cell phone effect, crowd, machinery...
+
+Usually does not help if add meaningless to our existing data
+attempts to create new artificial data.
+
+*Useful question to ask
+"How much work would it be to get 10*x as much data as we currently
+have ?"
+
+Brain storm then see if you can come up with ways of getting data.
+
+*Manually labeling yourself
+If you collect and label your own data. 
+How long minutes/hours/days would it take for 1 example ? 
+them if we calculate the time needed.
+
+Example if we have m = 1000 but needed 10,000
+10s to label 1 example
+10*9000 that is about 90,000 second that is if you work 8 hours a day
+3600 second in an hour. Then about 25 hours  that's 3.5 days of
+work. Pretty short I would say.

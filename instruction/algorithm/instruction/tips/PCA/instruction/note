@@ -1,0 +1,38 @@
+How to run.
+Read the READ_ME_FIRST in the instruction of algorithm folder to understand this
+
+To reduce the dimension algorithm
+you need to preprocess this first
+
+then run let k be the dimension you want to reduce
+
+#1 To get eigen vectors and S, ONLY USE U_reduced FROM THE TRAIN SET.
+[U_reduced, S] = pca(X_preprocessed, k)
+
+%To reduce to R^k
+%NoteX_preprocessed in the line below can be train set, test set, or cross validation set.
+#2
+[X_reduced] = pca_reduce(X_preprocessed, U_reduced)
+
+#3
+%To calculates the error of X_reduced or is that k the best ? run, 0.99 variance retained
+%is prefered
+pca_err(S, k)
+
+#4
+%Then to recover, result is X_approx
+%that is some what similar to original X.
+pca_recover(X_reduced, U_reduced)
+
+Note: To select the best k you can write a rountine like this, k should start from
+1 then up. Select the least k with the most data variance retained. 
+if lucky then k = 1 or k=2 k=3, we can visualize it.
+
+K = number smaller than n
+err = [];
+for k = 1:K
+	[U_reduced, S] = pca(X_preprocessed, k);
+	err(k) = pca_err(S, k);
+end
+[m, idx] = max(err); % use min for 1 - pca_err
+the_best_k = idx;

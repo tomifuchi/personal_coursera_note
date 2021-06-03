@@ -1,0 +1,795 @@
+-------Reading note-----------
+Note: To begin solving a machine learning problem you need to understand everything here
+to design, create, use the machine learning properly and effectively.
+
+You are here
+ v 
+Design -> create & use
+
+First immerse yourself in the algorithm then move on to how to create, and then design.
+Play with it, get the feel for it then designing it will be easier. Rather than
+alot of chit chat, mumbo jumbo without hands on experience.
+-------------------------------------------------------
+
+Contents
+
+*) Choosing features
+
+I) Prioritizing what to do
+II) What to do , tackling a project
+III) Error analysis
+IV) Condensing to 1 number (Precision + recall/F1 score)
+
+Some problem solutions design
+
+V) The anomality problem (Finding outliers)
+VI) The recommending problem (Recommending system)
+VII) Online learning
+VIII) Photo OCR
+------------------------------
+
+*) Choosing feature
+First one without doubt our upmost importance when designing any machine learning
+model is choosing our feature. You dissect your problem down and choose your feature
+from there, here are some tips on how to do so. 
+
+Some when choosing requires you to choose feature with the design in mind. But here
+is the general choosing strategy.
+
+Linear regression problem feature choosing
+--------------------------------------------
+look at human experts look at what
+do they look for so they can confidently predicts something.
+Mimic and include those features in your machine learning.
+
+Classification problem feature choosing
+--------------------------------------------
+What differentiate the thing you want to segregates ? Design then run test out the
+results using Error analysis then if the error is still too high. Go into the mislabeled
+data. Look into those data to see what feature you can create, or combine from
+existing feature.
+
+I) Prioritizing what to do
+==========================
+Before using or throwing a larger portion amounts of time into a project.
+It's really useful to design an appropriate machine learning system to solve
+a problem. And not to wastes anybody's time.
+
+System Design Example:
+
+Given a data set of emails, we could construct a vector for each email. Each
+entry in this vector represents a word. The vector normally contains 10,000 to
+50,000 entries gathered by finding the most frequently used words in our data
+set.  If a word is to be found in the email, we would assign its respective
+entry a 1, else if it is not found, that entry would be a 0. Once we have all
+our x vectors ready, we train our algorithm and finally, we could use it to
+classify if an email is a spam or not.
+
+So how could you spend your time to improve the accuracy of this classifier?
+
+    * Collect lots of data (for example "honeypot" project but doesn't always work)
+    * Develop sophisticated features (for example: using email header data in spam emails)
+    * Develop algorithms to process your input in different ways (recognizing
+misspellings in spam).
+
+It is difficult to tell which of the options will be most helpful.
+
+II) What to do ? and Tackling a project
+========================================
+Recommended approach.
+The recommended approach to solving machine learning problems is to:
+
+    * Start with a simple algorithm, implement it quickly, and test it early on
+your cross validation data.
+    * Plot learning curves to decide if more data, more features, etc. are likely
+to help.
+    * Manually examine the errors on examples in the cross validation set and try
+to spot a trend where most of the errors were made. Design your system, its'
+very important to get error results as a single, numerical value to try other configurations. Settings, subsets of data very quickly. To get it done quickly.
+(Read the error analysis below)
+
+For example, assume that we have 500 emails and our algorithm misclassified a
+100 of them. We could manually analyze the 100 emails and categorize them based
+on what type of emails they are. We could then try to come up with new cues and
+features that would help us classify these 100 emails correctly. Hence, if most
+of our misclassified emails are those which try to steal passwords, then we
+could find some features that are particular to those emails and add them to
+our model. We could also see how classifying each word according to its root
+changes our error rate.
+
+It is very important to get error results as a single, numerical value.
+Otherwise it is difficult to assess your algorithm's performance. For example
+if we use stemming, which is the process of treating the same word with
+different forms (fail/failing/failed) as one word (fail), and get a 3% error
+rate instead of 5%, then we should definitely add it to our model. However, if
+we try to distinguish between upper case and lower case letters and end up
+getting a 3.2% error rate instead of 3%, then we should avoid using this new
+feature. Hence, we should try new things, get a numerical value for our error
+rate, and based on our result decide whether we want to keep the new feature or
+not. (Andrew Ng)
+
+**Tackling with a project, Ceiling analysis.
+Here comes the time to deal with a project. What should you do. Introducing
+project pipeline. Here is an example of a text detection pipeline
+
+Image -> Text detection -> Characters segmentation -> Characters recognition
+
+With this pipeline, you would know what to do, and to split the work over the team
+properly. But after the algorithm has developed even very crudely and simple. To
+increase the sophistication or performance of predicting characters of the algorithm.
+
+Where should you put your effort and time ? 
+
+After selecting a metric for your algorithm performance. It's importance that's it's
+a number. Lets say in this example we take accuracy as our metric (true positive +
+true negative)/(total number of data)
+
+What we do is assumed that A unit in the pipeline can predict 100% correct. what's
+the increase in our accuracy ? We do that by deliberately give our pipeline each
+process right answer and measure our accuracy. 
+
+Before anything processing our overall system is  70% accuracy
+Text detection 72% (2% increase in accuracy if text detect is perfected to 100% correct)
+Characters segmentation 82% (10% increase in accuracy)
+Characters recognition 100% (18% increase in accuracy)
+
+We then pick out the most promising process then focus our time on that. Here it should
+be character segmentation process if increase will give our algorithm 18% increase
+in accuracy, and if you have time, segmentation process aswel. After two process
+is improve we in theory will get 98% accuracy in our algorithm. Which is good enough.
+
+Instead of going with gut feeling then spending like ALOT OF TIMES, I mean like 
+WEEKS MONTHS YEARS also. If you are not careful enough and pursue something that doesn't
+need to be pursuing. Prof Andrew said that somebody in the process of recognizing
+pipeline algorithm, spend like a year and a half THAT IS 1 YEAR AND 6 MONTHS. 547 days
+13128 HOURS spent. A paper written. But it can't be applied, or even if perfected
+doesn't make a significant impact on the accuracy of overall system. That's
+fucking baddddd, real baddd.
+
+Be sure to do this. DO NOT TRUST YOUR GUT FEELING, COLD HARD FACTS TRIUMPH.
+
+III) Error analysis:
+(Measuring performance of a learning algorithm)
+===============================================
+
+Precision and recall
+----------------------
+The devil's in the detail, even the concept of average still lend itself to be extremely
+inaccurate with the existence of outliers. So what would I do is to use these 3 number
+and it ratio to condense my algorithm into 3 4 numbers at most when evaluating.
+	    Actual 1  		Actual 0
+Predicted 1 True positive	False positive
+Predicted 0 False negative	True negative
+
+Accuracy : (True positive + True negative)/(True/False positive + True/False negative)
+Precision: (True positive)/(True positive + False positive). (Accuracy, high chance
+of it's something)
+Recall: (True positive)/(True pos + False negatively = Actual positive in the data set). (Detection in real data)
+
+(Detection and accuracy is negatively correlate)
+
+And error analysis may not be helpful for deciding, if this is likely to
+improve performance. Only solution is to try and see if it works.
+(This solution is particularly to address data set's that's skewed, 99/100 0's 1/100 1
+for example, classification problem. But this will also work for other cases)
+
+Trading off of accuracy and precision:
+Take example:
+Do you have cancer ? 1 for yes 0 for no
+
+Logistic regression: 0 <= h_theta(x) <=1 
+Predict 1 if h_theta(x) >= 0.5
+Predict 0 if h_theta(x) < 0.5
+
+This algorithm translate to this. If according to your feature that we collect and
+run on our machine learning with a highly optimized hypothesis, if you have more than
+50% chance that you have cancer then we are predicting that you have cancer. Vice versa
+less than 50% then we predict 0.
+
+This...Depends on how you wanted, you would wanted more accurate result that whether
+they have cancer or not. So what you can do is change h_theta(x) >= 0.9 that is
+if we detect anything that's equal or higher than 90% chance. They have cancer, more
+confident. Suits the job, But it will neglect people down in say 60 70 80...% chance.
+So...Depends on how you frame things.
+
+This here is higher precision, lower recall.
+
+And if you don't wanted to miss any chance of they having cancer.
+Set h_theta lower. That's if they had like 50% then yes, you conclude them to have
+cancer.
+
+This here is lower precision, higher recall.
+
+If this is in my hands, I will report people with like more than 50 lower than 70.
+We will report these cases to seek treatment, or more diagnosing. At 90% or more
+, starts getting comfortable radiated.
+
+The thing is you have to have what's important to you, then set things accordingly.
+
+IV) Try to condense this into 1 number
+===================================
+Or if you really wanted 1 number to condense two into 1 number you can use this.
+Don't use average, if for example
+recall = 1 and precision = 0.02 then avg = 0.51 <- This here is why you don't use average
+recall = 0.1 and precision = 0.7 then avg = 0.4
+recall = 0.4 and precision = 0.5 then avg = 0.45
+
+Instead use this
+F1 score = (2*P*R)/(P+R) This ranges from 0 to 1
+If P = 1 and R = 1 then F_score = 1
+If P = 0 and R = 1 then F_score = 0 <- Avoiding these both case here
+If P = 1 and R = 0 then F_score = 0
+
+Then what you do is changing h_theta(x) threshold, and see if F_score increases. Select
+the highest is your reasonable way to do it, supposedly.
+
+V) The anomality problem (Finding outliers)
+============================================
+If you have a lot of positive (y = 1) or alot of negative data (y=0) 
+(Skewed data). In short, it's the problem of predicting abnormality.
+Or outliers in statistics. In this problem we flag y = 1 for abnormal.
+and y = 0 for normal.
+
+Example 
+Manufacturing:
+A Jet engine rolls of assembly line, it's thoroughly tested before.
+shipping to the customers. The mechanics have tested alot. And
+we do have like in a sample of 6000 Jet engine, only 20 are faulty.
+That's a very small sample of negatives. What you want to do
+is if a new engine is given to you, predicts if that engine is faulty.
+
+Or servers, like if a computers have CPU usage up but no network
+usage increase. There might be a problem.
+
+Or fraud detection, features are users activities. Then we build
+what is the probability of the given user activity, is it likely
+to be a fraud in process. (Typing speed, ...)
+
+In short, detects abnormality.
+
+Normal distribution:
+---------------------
+Observed every where, it's a random variable that looks like
+a mountain with it highest point the mean of that data set.
+
+**Formula:
+mu: mean of the data set (sum of each x_i)/m
+sigma^2 or called variance:(1/m)*(sum of each x_i with (x_i - mu)^2)
+(sigma is called standard deviation)
+
+X ~ N(mu, sigma^2) = (1/(sqrt(2*pi)*sigma)) * 
+			exp((-(x - mu)^2)/(2*sigma^2))
+
+**Graph description:
+left to right, it goes from -3*sigma -4*sigma as close to zero
+then increase up to the highest point is the mean, then similarly
+to slowly down to about 3 4*sigma.
+
+
+Data processing:
+----------------------
+An example is x in R^n. X is the set of all x's in the dataset
+We are going to assume each feature is distributed in a normal
+distribution.
+
+When we do this, be sure first to plot the data into histogram, split
+it small so we can see if it's some what representing a normal 
+distribution. Like X^.5 or take log or anything alike to try
+and transform the data looks vaguely or like normal distribution.
+log(x+1) or sqrt(x) or log(x + c) (c in R).
+
+Note:
+("Usually works okay when it's not Gaussian, it will works just fine").
+It's a nice sanitary way to use your data.
+
+In anomality detection problem what we are looking for is data will
+be unusually large or unusually small when anomalous. Therefore, look
+for features or combine them in such ways that will gives a sure
+fire way of distinguish anomalous data from normal ones.
+
+Most common problems is this: Is you can't distinguish anomalous 
+from the normal ones, that's the anomalous data is buried in normal
+ones. What you do is to look into anomalous data. Check to see what
+stands out, what features can you combine, look for or in short
+what is different from this anomalous example to the rest. Then the
+feature came up will be the one that differentiate anomalous data
+from the rest.
+
+Example
+In data center
+x_1 = memory in computer
+x_2 = number of disks
+x_3 = CPU load
+x_4 = network traffic
+
+x_5 = x_3/x_4 = (CPU load)/(network traffic)
+
+Hypothesis building:
+---------------------------------------
+We are going to construct a model that have p(x) < epsilon
+
+**This here is a product of normal distribution**
+p(X) = p(x_1; mu_1,sigma_1^2)*
+       p(x_2; mu_2,sigma_2^2)*
+       p(x_3; mu_3,sigma_3^2)*...*p(x_n; mu_n,sigma_n^2)
+
+with each p(x_i; mu_i, sigma_i^2)  = (1/(sqrt(2*pi)*sigma_i^2)) *...
+        ¦     exp((-(X - mu).^2)/(2*sigma_i^2));
+
+mu_i: mean of the data set (sum of each x_i)/m
+sigma_i^2 or called variance:(1/m)*(sum of each x_i with (x_i - mu_i)^2)
+
+**This here is a multivariate normal distribution**
+p(X) = (1/([(2*pi)^(n/2)]*det(SIGMA)^(1/2))) *
+  		exp((-1/2) * (x - mu)^T * (SIGMA)^-1 * (x - mu))
+
+mu = (1/m) sum of all x's
+SIGMA = (1/m) sum of all example with (x_i - mu)^t*(x_i - mu)
+      = (1/m) * (X - mu)^T * (X - mu)
+
+(NOTE: Depends on your needs consult the below paragraph on when to use
+multivariate and when to use the product.)
+
+Then with a new x, or an observation plug it in p(X) it will 
+calculates the product of each feature of that observations or 
+the whole multivariate version. 
+
+Then
+outputs p(x) then depends on your choice of epsilon it's going to
+flag it y = 1 (anomalous)  or y = 0 (normal).
+
+What does this algorithm do:
+-----------------------------
+With x in R^2. If we plot this we will have a 3d mountain with
+x_1 and x_2 on the x,y axis, p(x) is the height or z axis. Depends
+on the mu_1 and mu_2 it will moves the mountain around. sigma_1,
+sigma_2 is going to fatten or slim down x_1 scale or x_2 scale.
+
+And with a new x_3 you get a p(x_3) then the mountain here. is like
+with a cut surface drawing a small circle then a bigger circle,
+then bigger circle (depends on mu and sigma it might look different
+assume that mu_1 = mu_2 and sigma_1 =sigma_2 is some what not too
+small or weird), then when you choose epsilon is the circle you want
+to mark that if it cross this (bigger than epsilon) then it's abnormal. 
+
+Multivariate normal distribution:
+----------------------------------------
+This turns to to be the same as the product one if the SIGMA is 
+a diagonal matrix (x_ii is neq 0 and x_ij = 0 (i neq j)).
+
+mu in R^n, SIGMA in R^nxn (covariance matrix)
+
+Here is the formula
+
+X ~ N(X; mu, sigma) = (1/([(2*pi)^(n/2)]*det(SIGMA)^(1/2))) *
+  		exp((-1/2) * (x - mu)^T * (SIGMA)^-1 * (x - mu))
+
+Graph description:
+Similar to normal distribution, but it automatically achieves
+correlation of variables (increase together, decrease together).
+
+mu = [0;0]
+SIGMA = [1 0.5;0.5 1] then it will be the bell but x_1 and x_2 will
+grows together there fore the bell instead of a round shape it's 
+going to be like eclipse 45 degree to the right, but if 
+SIGMA = [1 -0.5;-0.5 1] then it's 45 degree to the left, negatively
+correlates. 
+
+Product doesn't have this feature.
+
+Multivariate vs product
+------------------------
+Product:
+- Often used.
+- To captures correlations between features you need to create an
+extra feature to capture it(Manually).
+- Computationally cheaper. (Scales better to large n)
+- Okay if m is smaller than n. or m small.
+
+Multivariate:
+- Automatically captures correlations between features.
+- Computationally expensive. (Slower)
+- MUST have m > n and no duplication features or else SIGMA is
+invertable.(More observations than features m > 10n ish, duplication
+is rarely seen but beware. linear algebra speaking that
+feature is linearly dependent for duplicates feature)
+
+Evaluation:
+---------------------
+In this algorithm, if you have some labeled data it's going to 
+help alot when trying evaluates your algorithm's hypothesis.
+
+Using F1 score is as stated preferred way
+of getting a single number of showing that your algorithm is working,
+and doing the guessing correctly. Or if you really wanted to 
+be specific go for precision and recall or If you REALLy wanted to
+go to true positives,false positive,..and the likes.
+
+This is going to help you when you add or remove features, changes
+epsilons. Removing training data, adding training data, ... Any kind
+of changes. The F1 score is going to give back a score if both
+precision and recall is high then F1 will be high.
+
+Splitting data:
+For a specific example:
+10,000 aircraft engines (normal)
+20 flawed engines (abnormal)
+
+(Even if some small abnormal aircraft engine slips into 10,000
+engines is ... Acceptable.)
+
+We split the data like this:
+
+Training set: 6000 normal engine
+CV: 2000 normal engine 10 flawed engine
+Test: 2000 normal engine 10 flawed engine
+
+choosing epsilon:
+One way to choose epsilon is to choose it through cross validation set.
+
+Anomality vs supervised learning
+-----------------------------------------
+Why should you use this instead of logistic regression or even
+neuron network ? Well
+
+Anomality detection:
+- Very small example to y=1 (10 - 20 in thousands or millions).
+- Large y = 0.
+- Or Many different "types" of anomalities. Hard for any algorithm,
+to learn from positive examples what the anomalies looks like.
+AKA problems when shit goes wrong, we don't know where.
+- Or Future abnormalities may look nothing like something in the
+anomalous examples we have seen before.
+
+Application (These can switch to supervised if can get
+alot of both positives and negatives examples):
+- Fraud detection.
+- Manufacturing.
+- Monitoring machines in data center.
+
+Supervised learning:
+- Large positives AND negatives.
+- Enough examples to see what positives and negatives looks like.
+Future examples are some what similar to what is in the example data
+set.
+
+Application (These can be switch to anomality detection if
+skewed data):
+- Email spam classification.
+- Weather prediction.
+- Cancer classification.
+
+Take spam email, it's supervised because mails even though spams have
+many types. It can only get so creative until it can't anymore. That's
+why it's supervised and not anomality detection problem.
+
+So, when we face with data that's rarely seen or imagine. What
+we should do is learn from what is normal then if it's not normal.
+Predicts.
+
+VI) The recommending problem (Recommending system) (week_9)
+-------------------------------------------------
+Like Netflix ? Like YouTube ? How do they do it ? How do they
+can find or suits each people taste and recommend relevant things
+to them ? Or shopping ? Or Similar item . Then it's the problem of
+recommending system. If you really think about it, this problem 
+responsible for a big chunk of the BIG tech company revenue.
+
+This particular problem can like any other design, isolated and
+generalized into other purpose. So what I'm going to do is write
+how the problem is presented and a solutions to it. Or one way
+of solving the problem.
+
+*The problem:
+(It's better if professor Andrew explain and wrote out the 
+math involved here, He's better. But here's the run down of the problem and solution
+proposed )
+
+You are a media who rents out music or movies, spotify, Netflix,...
+How can you recommend to your user what's relevant to their taste ?
+
+n_u : number of user
+n_m : number of movies
+
+Specifically movies. Your user can rate 0 to 5 stars.
+We have matrix Y with movies x users
+
+		Bob	Dylan	Joe	Jane
+Taxi driver	3	4	?	1
+River Kuwai	?	?	0	?
+Just friends	0	2	5	5
+The proposal	2	?	4	3
+...
+
+
+Matrix R is going to be movies x users but instead of ratings, it's
+if that movies rated it's going to be 1 if not 0
+
+		Bob	Dylan	Joe	Jane
+Taxi driver	1	1	0	1
+River Kuwai	0	0	1	0
+Just friends	1	1	1	1
+The proposal	1	0	1	1
+...
+
+Matrix Theta is going to be the learnt taste of each user which is
+User x features
+
+	Theta1	Theta2	Theta3 ... Thetan
+Bob 	...	...	...	   ...
+Dylan
+Joe
+Jane
+...
+
+With these data, what you wanted to do is to find the taste of
+each user then fill in the ? of the Y rating. How will they rate 
+the movie ? Then recommend them about 5-10 movie that they will likely
+to rate 4-5 stars.
+
+Implementation detail note:
+Should use mean normalization for Y. If not if a user has not
+rated anything will have all their ratings = 0. Or predicting 0.
+To avoid this, you can use mean normalization for Y. Then if
+a user haven't rated anything it will be the average rating by
+other users by default. And no good way of recommending movie
+to those newcomers.	
+
+***Solution: Content based recommendation (Or one way of doing it):
+Here's one way to do it. This is called content based recommendation
+Now we take X as a feature matrix like this with movies x feature
+that is, This measuring is measuring the degree of content in a movie.
+
+		Action	Love	Comedy	Horror
+Taxi driver	...	...	...	...
+River Kuwai	.
+Just friends	.
+The proposal	.
+...
+
+we can now treat this like linear regression problem. Given a
+movie with feature and a user's taste then we can have a user i taste
+to be theta(i)^t*X(i) We will then can predict a person's rating
+for that movie.
+
+The problem doesn't end here:
+
+****IF WE HAVE THE MOVIE"S FEATURES WRITTEN***
+
+Calculates the cost when known X's, guess theta's
+
+define:
+r(i,j) = 1 if y(i,j) is rated
+y(i,j) rating
+theta(j) user j taste 
+x(i) feature for movie i
+For user j, movie i, predict score with theta(j)^T*x(i)
+
+m(j) = number of movie ranked by user j
+To learn theta(j):
+
+j = 1..n_u
+we minimize theta(j)  (For a user j)
+J(theta(j)) = 
+1/2 *
+sum of j:r(i,j)=1 [only rated movie counts] (theta(j)^T*x(i) - y(i,j))^2
++ [lambda/2]*sum k=1 to n (theta(j)_k)^2
+
+Or to write it for all user, this is the COST FUNCTION
+
+J(theta(1),...,theta(n)) = 
+
+1/2 *
+sum from j = 1 to n_u
+sum of i:r(i,j)=1 [only rated movie counts] (theta(j)^T*x(i) - y(i,j))^2
++ [lambda/2]*sum j = 1 to n_u (sum k=1 to n (theta(j)_k)^2)
+
+We then run our gradient descend on it with
+
+k = 0
+theta(j)_k = theta(j)_k - alpha * sum of i:r(i,j)=1 [only rated movie counts] (theta(j)^T*x(i) - y(i,j))*x(i)_k 
+
+k neq 0
+theta(j)_k = theta(j)_k - alpha * sum of i:r(i,j)=1 [only rated movie counts] (theta(j)^T*x(i) - y(i,j))*x(i)_k + lambda*theta(j)_k
+
+*****IF WE HAVE THE USER"S TASTE BUT NOT MOVIE FEATURES*******
+
+Now given theta's what's our X ? We are going to minimize this
+Do the opposite. Calculates the cost when known theta, guess x's
+
+J(X(1),...,X(n_u)) = 
+1/2 *
+sum from i = 1 to n_m
+sum of j:r(i,j)=1 [only rated movie counts] (theta(j)^T*x(i) - y(i,j))^2
++ [lambda/2]*sum i = 1 to n_m (sum k=1 to n (x(i)_k)^2)
+
+Collaborative rating, or low rank matrix factorization:
+-------------------------------------------------------
+Assumed you have Y and R
+
+If you have x's you can estimate theta's
+If you have theta's you can estimate X's
+
+What you can do is randomly guess some value of theta's if you don't
+have any or start with X's is best. Let's say you guess theta's first
+
+Guess theta's -> x's -> theta's -> x's -> ...
+
+Do this enough times, then x's and theta's will converge and will
+not change no more. That's when you have found optimal features
+and guessed user's taste.
+
+This works hopefully because:
+- Each user rate multiple movies. 
+- Each movie is rated by multiple users.
+
+This is called collaborative because we are rating, and helping the
+system better recommending stuff to other users.
+
+This is the combine version of all the above, this is
+going to solve the problem of rating movies. We now will do this
+
+#1 Initialized small random value for x's and theta's
+
+#2
+We are minimizing both X's and theta's instead of sequentially
+going back and forth. (x_0 = 0, theta_0 = 0)
+
+J(X(1),...,X(n_u),theta(1)...,theta(n_u)) = 
+
+(1/2) *
+sum of (i,j):r(i,j) [only rated movie counts] (theta(j)^T*x(i) - y(i,j))^2
++ [lambda/2]*sum i = 1 to n_m (sum k=1 to n (x(i)_k)^2)
++ [lambda/2]*sum j = 1 to n_u (sum k=1 to n (theta(j)_k)^2)
+
+With gradient descend that looks like this for (fortunately with
+no x1 or theta0) every j = 1 to n_u, i = 1 to n_m
+
+x(i)_k = x(i)_k - alpha * sum of j:r(i,j)=1 [only rated movie
+counts] (theta(j)^T*x(i) - y(i,j))*theta(j)_k + lambda*x(i)_k
+
+theta(j)_k = theta(j)_k - alpha * sum of i:r(i,j)=1 [only rated movie
+counts] (theta(j)^T*x(i) - y(i,j))*x(i)_k + lambda*theta(j)_k
+
+#3 
+For a user with learnt theta and feature of movie x. 
+theta^t*x will gives us a rating.
+
+#Implementation detail for mean normalization
+Compute average rating for each movie in mu n_m x 1
+
+for i = 1 : n_m
+Y_normalized = Y(i,:) - mu(i);
+endfor
+
+Then we use this data for our dataset. Then when we predict our movie
+
+theta(j)^t*x(i) + mu(i) then this will give us the right answer.
+
+Then in this case. If a user havent' rated anything it will be
+the average rating of other users. Movies with no rating. 
+is not as important as user's without rating. 
+
+***Some extra tips Prof Andrew gave us
+If you have a feature for a product or in this case a movie. X(i),
+sometimes, if you have let machine learnt the features. It usually
+will not be the same features that you have intended to be. That means
+it may not be the degree that you have initially thought. But something
+else. Like movies people like to watch at 9:33PM or some crazy things
+like that. 
+
+But what they are useful for is to recommend related stuff, to get
+similar items j that are related to item i
+
+small norm(x(i) - x(j))
+
+VII)Online learning
+=====================
+Say that you are a shipping center that wanted to close the deal with
+the customer more, get more business and you are willing to haggle
+price of shipping with the customer. To get more business you wanted
+to figure out using logistic regression or whatever. That
+
+for y = 1 they choose your service, 0 for not we need this probability
+highest p(y = 1|x; theta). So what we can do is learn
+
+Repeat forever{
+	Get 1 new data (x, y) corresponding to USER
+	update Theta using (x,y) (Stochastic)
+		j = 0..n
+		theta(j) = theta(j) - alpha * (h_theta(x) - y)x_j
+	Then throw away this example.
+}
+
+If you have a website or service constantly then this will adapt to
+user's current taste or user's current preferences. If you have 
+a small user base. It's better to save data then run instead of on
+the fly like this.
+
+Or similar to recommending system this can also show user high likely
+of selecting. For an online store
+
+y = 1 click , y = 0 no click.
+
+Each item is (x, y) X is feature y is click or no click.
+
+If user type into a search query bar. You can construct
+feature from those query like what item that it's what spec what price
+where it's. Then calculate p(y = 1|x;theta). Selects the highest
+show them 10 items that they will highly likely click. Then if a user
+click on an item. Then change theta accordingly to that item pre
+ferences.
+
+probability of user clicking on a thing is call 
+predicted (CTR click through rate)
+
+Other uses: Offer shows to users, customized news articles, 
+product recommendation...
+
+VIII) Photo OCR
+===================
+This is the last lesson of Prof Andrew course therefore it won't be anything fancy
+just explanation on how it would come about and work.
+
+Given an image, how do you recognized letters/text on an image ? Then look at
+the text region, then what is the text saying. 
+
+(We have seen this This is our Japanese dictionary app camera function. 
+Hmmm come to think of it.
+It first take picture, then it will appears white block indicating that's a Japanese
+character then you have to manually. rub the region you wanted to translate)
+
+Image -> Text detection  -> characters segmentation -> characters recognition
+	->Spell checking (optional)
+
+***Text detection 
+Goes over then draws a rectangle around those text. Introducing sliding window
+to recognize our object. It's simple, have a chunk of pixel that's about 10x10 or
+bigger but shrinks down to 10x10 to something that your computer can run reasonably
+well. Then from left to right top to bottom. Goes slide your square/rectangle across
+the picture with 1 pixel increment or 2 or 3 4 depends on how many you want.
+
+You can do this with people as well. Instead of text, you can identify human.
+(x = 82x36 picture of image patches then y = 1 with people y = 0 with no people
+around 1000 or 10,000 example or more. Similar to said above, slide that across
+the 82x36. Then if the algorithm found a person even far way, draw a box around them.
+To detect people near or far. Take a large image patch say 100x100 the shrink it down
+and feed to the algorithm 82x36. With this far or near we can detect people)
+
+Then with a data set of text, what you do. Instead of people, we now detecting text.
+With lots of small and big patches of pixels. You will get a similar result similar
+to big text and small text similar to people far and near.
+
+One way to visualize our result is to color everything black then only the
+text-detected region to be white or shades of gray correspond to probability 
+of confidence that's a text.
+
+Expansion aerator ? (I'm butchering this)
+Like black and white above, then if a near neighbor with distance less than some
+pixel. Group them together as one.
+
+We then take that white blob, draw a rectangle around it. (prof Andrew said to
+ignore tall text region guesses, I don't think so)
+
+***Character segmentation
+Then segments out individual characters. 
+
+Sliding window for this too. Positives example, negative example 
+x is a patch of image y = 1 if it contains a letter, y = 0 if it's in the
+middle of two letter. Gap or split. Train a classifiers differentiate.
+
+Output of this is y = 1, that is patches of image that's only letter inside of it. And
+not the gap.
+
+***Character recognition
+Then with those individual character recognize what character is it.
+
+train this with a bunch of A's B's C's data or letter style to recognize what
+letter is it.
+
+Then output should be a letter in our alphabet, or some other language alphabet.
+
+Spell checking (optional step)
+Spell checking, after that string of text is defined. You can present a word
+with the highest probability is that word but misspelled. to the user. See if they
+choose it. Then relabel your data from previous step to improve our system.
