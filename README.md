@@ -9,3 +9,5 @@ some of the concept in this folder.
 
 Similar to stochastic gradient descend, how do you train the model with too much information ? You train it one by one and adapt accordingly. You may
 stumble but...You'll eventually arrive at the optimal solution. Eventually.
+
+Note: I'm well aware of the Coursera Honor Code when I joined this course. So I didn't upload any weekly assignment's answer in the course. Just the algorithm I wrote myself and my notes.
