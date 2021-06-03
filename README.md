@@ -7,5 +7,5 @@ The folder have to be upload and share.
 Again this is very rough knowledge, as I further my understanding when I learn Linear algebra and Machine learning theory, I'm going to fix up and clarify
 some of the concept in this folder.
 
-Similar to stochastic gradient descend, how are you going to train the model with too much information ? You train it one by one and adapt accordingly. You may
+Similar to stochastic gradient descend, how do you train the model with too much information ? You train it one by one and adapt accordingly. You may
 stumble but...You'll eventually arrive at the optimal solution. Eventually.
