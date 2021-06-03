@@ -1,6 +1,6 @@
 # Coursera personal note
 This repo documents my knowledge when I finished coursera course on Machine learning.  In the course some of these algorithms were not general enough. Either they're
-tied to something really specific or doesn't support multivarates. Here in this folder I've organized the notes into orders. The writings is very very rough, maybe
+tied to something really specific or didn't support multivarates. Here in this folder I've organized the notes into orders. The writings is very very rough, maybe
 containing explicit languages too. But..It's who I'm, this note is supposed for personal use. But to demonstrates that I really do understand the course. 
 The folder have to be upload and share.
 
